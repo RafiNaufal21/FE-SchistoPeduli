@@ -1,0 +1,17 @@
+.causes .iconlike{
+    margin: 0.5rem 1.5rem 0 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.causes .iconlike i{
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #FF6F0F;
+}
+
+.causes .iconlike span{
+    margin: 0 0.5rem;
+    font-size: 1.3rem;
+    color: #FF6F0F;
+}

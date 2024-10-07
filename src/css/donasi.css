@@ -1,0 +1,42 @@
+
+.my-6{
+    margin: 4rem auto;
+}
+
+.my-6 h3{
+    padding-top: 3rem;
+    font-family: "Ubuntu-Bold", Helvetica;
+}
+
+.line {
+    width: 100%;
+    border-top: 2px solid #DDDDDD;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.centered-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 0 10px;
+}
+
+#donasi label{
+    border-color: #DDDDDD;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+    padding: 1rem;
+    box-shadow: 0px 2px 7px rgba(162, 149, 149, 0.8);
+}
+
+#donasi hr {
+    margin: 1rem 0 0 0;
+    border: none;
+    height: 1px;
+    color: #000000; 
+    background-color: #333;
+}

@@ -3,27 +3,65 @@ import Footer from '../fragments/Footer';
 import Navbar from '../fragments/Navbar';
 import Spinner from '../fragments/Spinner';
 import axios from 'axios';
+import { MapContainer, TileLayer, Polygon, Popup } from 'react-leaflet';
+
+const getStatistik = async() =>{
+  try {
+    const response = await axios.get('http://localhost:1945/statistik')
+    return response
+} catch (error) {
+    return error
+    }
+}
 
 const Peta = () => {
-  const [gempaData, setGempaData] = useState({
-    title: 'Gempa Terkini',
-    status: 'success',
-    gempa_terkini: [],
-  });
+  // const [gempaData, setGempaData] = useState({
+  //   title: 'Gempa Terkini',
+  //   status: 'success',
+  //   gempa_terkini: [],
+  // });
 
-  useEffect(() => {
-    const getGempa = async () => {
+  // useEffect(() => {
+  //   const getGempa = async () => {
+  //     try {
+  //       await axios.get('http://localhost:5055/terkini').then((res) => {
+  //         setGempaData(res.data);
+  //       });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   getGempa();
+  // });
+    const [statistik,setStatistik] = useState(null)
+    const [lokasi,setLokasi] = useState([])
+
+
+    const fetchData = async()=>{
       try {
-        await axios.get('http://localhost:5055/terkini').then((res) => {
-          setGempaData(res.data);
-        });
+        const res = await getStatistik();
+        setStatistik(res?.data?.data_statistik);
+        console.log(res?.data?.data_statistik)
       } catch (error) {
         console.log(error);
       }
-    };
-    getGempa();
-  });
-
+    }
+    useEffect(() => {
+      const fetchLokasi = async()=>{
+        try {
+          const res = await fetch('http://localhost:1945/lokasi');
+          setPolygons(res);
+      } catch (error) {
+          console.error('Error fetching polygons:', error);
+      }
+      }
+      fetchData();
+      fetchLokasi();
+    }, []);
+    if (!statistik) {
+      return <div>Loading...</div>;
+    }
+    console.log(lokasi)
   return (
     <>
       <Spinner />
@@ -81,41 +119,54 @@ const Peta = () => {
 
       <div className="container-xxl">
         <h2 className="blog-grid-title-lg mb-3" style={{ color: 'black' }}>
-          JUMLAH KASUS SCHISTOSOMIASIS DI KABUPATEN POSO TAHUN 2017-2023
+          JUMLAH KASUS SCHISTOSOMIASIS DI NAPU TAHUN 2017-2023
         </h2>
 
-        {gempaData.status === 'success' ? (
-          <table className="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Desa</th>
-                <th>2017</th>
-                <th>2018</th>
-                <th>2019</th>
-                <th>2020</th>
-                <th>2021</th>
-                <th>2022</th>
-                <th>2023</th>
-              </tr>
-            </thead>
-            <tbody>
-              {gempaData.gempa_terkini.map((data, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{data.waktu_gempa}</td>
-                  <td>{data.lintang}</td>
-                  <td>{data.bujur}</td>
-                  <td>{data.magnitudo}</td>
-                  <td>{data.kedalaman}</td>
-                  <td>{data.wilayah}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
+        {statistik && (
+  <table className="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Desa</th>
+        <th>2017</th>
+        <th>2018</th>
+        <th>2019</th>
+        <th>2020</th>
+        <th>2021</th>
+        <th>2022</th>
+        <th>2023</th>
+      </tr>
+    </thead>
+    <tbody>
+      {Object.keys(statistik).map((desaKey, index) => {
+        const data = statistik[desaKey]; // Ambil data untuk desa tertentu
+        const jumlahKasus = {}; // Inisialisasi objek untuk menyimpan jumlah kasus per tahun
+
+        // Mengisi jumlah kasus per tahun
+        data.forEach(item => {
+          jumlahKasus[item.tahun] = item.jumlah_kasus; // Sesuaikan dengan struktur data
+        });
+
+        return (
+          <tr key={desaKey}>
+            <td>{index + 1}</td>
+            <td>{desaKey.replace('desa:', '')}</td> {/* Menghilangkan prefix 'desa:' */}
+            <td>{jumlahKasus[2017] || 0}</td>
+            <td>{jumlahKasus[2018] || 0}</td>
+            <td>{jumlahKasus[2019] || 0}</td>
+            <td>{jumlahKasus[2020] || 0}</td>
+            <td>{jumlahKasus[2021] || 0}</td>
+            <td>{jumlahKasus[2022] || 0}</td>
+            <td>{jumlahKasus[2023] || 0}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+)}
+         {/* : (
           <p>Error fetching earthquake data</p>
-        )}
+        ) */}
       </div>
 
       <center>
@@ -124,90 +175,39 @@ const Peta = () => {
         </div>
       </center>
 
-      <div className="container-fluid bg-light overflow-hidden px-lg-0">
-        <div className="container contact px-lg-0">
-          <div className="row g-0 mx-lg-0">
-            <div className="peta">
-              <div className="map">
-                <iframe
-                  src="https://www.google.com/maps/d/u/0/embed?mid=1jg4NJl5DR2XqcRNhtZ_WbtKO-E_cDTQ&noprof=1&"
-                  width="100%"
-                  height="600"></iframe>
-              </div>
-              <div className="teks">
-                <h2>Keterangan</h2>
-                <br />
-
-                <h4 style={{ fontSize: 'large' }}>
-                  {' '}
-                  <img
-                    src="img/icontsunami.png"
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '70%',
-                    }}
-                    alt=""
-                  />{' '}
-                  Tsunami
-                </h4>
-                <h4 style={{ fontSize: 'large', justifyContent: 'right' }}>
-                  {' '}
-                  <img
-                    src="img/icongempabumi.png"
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '70%',
-                    }}
-                    alt=""
-                  />{' '}
-                  Gempa Bumi
-                </h4>
-                <h4 style={{ fontSize: 'large', justifyContent: 'right' }}>
-                  {' '}
-                  <img
-                    src="img/icongunung.png"
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '70%',
-                    }}
-                    alt=""
-                  />{' '}
-                  Gunung Meletus
-                </h4>
-                <h4 style={{ fontSize: 'large', justifyContent: 'right' }}>
-                  {' '}
-                  <img
-                    src="img/icontanahlongsor.png"
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '70%',
-                    }}
-                    alt=""
-                  />{' '}
-                  Tanah Longsor
-                </h4>
-                <h4 style={{ fontSize: 'large', justifyContent: 'right' }}>
-                  {' '}
-                  <img
-                    src="img/iconbanjir.jpg"
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '70%',
-                    }}
-                    alt=""
-                  />{' '}
-                  Banjir
-                </h4>
+        <div className="container-fluid bg-light overflow-hidden px-lg-0">
+          <div className="container contact px-lg-0">
+            <div className="row g-0 mx-lg-0">
+              <div className="peta">
+                <div className="map">
+                <MapContainer center={[-1.3980, 120.3267]} zoom={13} style={{ height: '100vh', width: '100%' }}>
+            <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            {lokasi.map((polygon) => {
+                // Mengonversiastring WKT menjadi array koordinat
+                const coords = polygon.kordinat.split(',').map(coord => {
+                    const [lng, lat] = coord.trim().split(' ').map(Number);
+                    return [lat, lng]; // Leaflet menggunakan format [lat, lng]
+                });
+                return (
+                    <Polygon key={polygon.id} positions={coords} color="blue">
+                        <Popup>
+                        
+                            <strong>{polygon.nama}</strong><br />
+                            <h1>titik kordinat : {polygon.kordinat}</h1>
+                            
+                        </Popup>
+                    </Polygon>
+                );
+            })}
+        </MapContainer>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
       <Footer />
     </>

@@ -2,27 +2,171 @@ import { useEffect, useState } from 'react';
 import Footer from '../fragments/Footer';
 import Navbar from '../fragments/Navbar';
 import Spinner from '../fragments/Spinner';
+import SchistoChart from '../fragments/chart';
 import axios from 'axios';
-
+const dataStatistik = {
+  'desa:wuasa': [
+    { tahun: '2017', jumlah_kasus: '1' },
+    { tahun: '2018', jumlah_kasus: '0' },
+    { tahun: '2019', jumlah_kasus: '1' },
+    { tahun: '2020', jumlah_kasus: '1' },
+    { tahun: '2021', jumlah_kasus: '2' },
+    { tahun: '2022', jumlah_kasus: '16' },
+    { tahun: '2023', jumlah_kasus: '3' },
+  ],
+  'desa:watumaeta': [
+    { tahun: '2017', jumlah_kasus: '8' },
+    { tahun: '2018', jumlah_kasus: '4' },
+    { tahun: '2019', jumlah_kasus: '0' },
+    { tahun: '2020', jumlah_kasus: '0' },
+    { tahun: '2021', jumlah_kasus: '5' },
+    { tahun: '2022', jumlah_kasus: '13' },
+    { tahun: '2023', jumlah_kasus: '2' },
+  ],
+  'desa:banyusari': [
+    { tahun: '2017', jumlah_kasus: '5' },
+    { tahun: '2018', jumlah_kasus: '2' },
+    { tahun: '2019', jumlah_kasus: '0' },
+    { tahun: '2020', jumlah_kasus: '0' },
+    { tahun: '2021', jumlah_kasus: '0' },
+    { tahun: '2022', jumlah_kasus: '5' },
+    { tahun: '2023', jumlah_kasus: '0' },
+  ],
+  'desa:sedoa': [
+    { tahun: '2017', jumlah_kasus: '11' },
+    { tahun: '2018', jumlah_kasus: '4' },
+    { tahun: '2019', jumlah_kasus: '0' },
+    { tahun: '2020', jumlah_kasus: '3' },
+    { tahun: '2021', jumlah_kasus: '0' },
+    { tahun: '2022', jumlah_kasus: '17' },
+    { tahun: '2023', jumlah_kasus: '3' },
+  ],
+  'desa:kaduwaa': [
+    { tahun: '2017', jumlah_kasus: '8' },
+    { tahun: '2018', jumlah_kasus: '1' },
+    { tahun: '2019', jumlah_kasus: '0' },
+    { tahun: '2020', jumlah_kasus: '0' },
+    { tahun: '2021', jumlah_kasus: '1' },
+    { tahun: '2022', jumlah_kasus: '5' },
+    { tahun: '2023', jumlah_kasus: '14' },
+  ],
+  'desa:alitupu': [
+    { tahun: '2017', jumlah_kasus: '14' },
+    { tahun: '2018', jumlah_kasus: '7' },
+    { tahun: '2019', jumlah_kasus: '0' },
+    { tahun: '2020', jumlah_kasus: '4' },
+    { tahun: '2021', jumlah_kasus: '5' },
+    { tahun: '2022', jumlah_kasus: '38' },
+    { tahun: '2023', jumlah_kasus: '21' },
+  ],
+  'desa:tamadue': [
+    { tahun: '2017', jumlah_kasus: '30' },
+    { tahun: '2018', jumlah_kasus: '8' },
+    { tahun: '2019', jumlah_kasus: '5' },
+    { tahun: '2020', jumlah_kasus: '4' },
+    { tahun: '2021', jumlah_kasus: '8' },
+    { tahun: '2022', jumlah_kasus: '39' },
+    { tahun: '2023', jumlah_kasus: '18' },
+  ],
+  'desa:mekarsari': [
+    { tahun: '2017', jumlah_kasus: '16' },
+    { tahun: '2018', jumlah_kasus: '5' },
+    { tahun: '2019', jumlah_kasus: '3' },
+    { tahun: '2020', jumlah_kasus: '3' },
+    { tahun: '2021', jumlah_kasus: '3' },
+    { tahun: '2022', jumlah_kasus: '26' },
+    { tahun: '2023', jumlah_kasus: '15' },
+  ],
+  'desa:maholo': [
+    { tahun: '2017', jumlah_kasus: '8' },
+    { tahun: '2018', jumlah_kasus: '2' },
+    { tahun: '2019', jumlah_kasus: '2' },
+    { tahun: '2020', jumlah_kasus: '1' },
+    { tahun: '2021', jumlah_kasus: '4' },
+    { tahun: '2022', jumlah_kasus: '22' },
+    { tahun: '2023', jumlah_kasus: '15' },
+  ],
+  'desa:winowanga': [
+    { tahun: '2017', jumlah_kasus: '25' },
+    { tahun: '2018', jumlah_kasus: '8' },
+    { tahun: '2019', jumlah_kasus: '1' },
+    { tahun: '2020', jumlah_kasus: '3' },
+    { tahun: '2021', jumlah_kasus: '5' },
+    { tahun: '2022', jumlah_kasus: '28' },
+    { tahun: '2023', jumlah_kasus: '19' },
+  ],
+  'desa:dodolo': [
+    { tahun: '2017', jumlah_kasus: '17' },
+    { tahun: '2018', jumlah_kasus: '7' },
+    { tahun: '2019', jumlah_kasus: '1' },
+    { tahun: '2020', jumlah_kasus: '3' },
+    { tahun: '2021', jumlah_kasus: '5' },
+    { tahun: '2022', jumlah_kasus: '10' },
+    { tahun: '2023', jumlah_kasus: '10' },
+  ],
+  'desa:watutau': [
+    { tahun: '2017', jumlah_kasus: '5' },
+    { tahun: '2018', jumlah_kasus: '0' },
+    { tahun: '2019', jumlah_kasus: '0' },
+    { tahun: '2020', jumlah_kasus: '1' },
+    { tahun: '2021', jumlah_kasus: '3' },
+    { tahun: '2022', jumlah_kasus: '3' },
+    { tahun: '2023', jumlah_kasus: '6' },
+  ],
+  'desa:wanga': [
+    { tahun: '2017', jumlah_kasus: '2' },
+    { tahun: '2018', jumlah_kasus: '1' },
+    { tahun: '2019', jumlah_kasus: '4' },
+    { tahun: '2020', jumlah_kasus: '0' },
+    { tahun: '2021', jumlah_kasus: '1' },
+    { tahun: '2022', jumlah_kasus: '4' },
+    { tahun: '2023', jumlah_kasus: '22' },
+  ],
+  'desa:kalemago': [
+    { tahun: '2017', jumlah_kasus: '11' },
+    { tahun: '2018', jumlah_kasus: '4' },
+    { tahun: '2019', jumlah_kasus: '1' },
+    { tahun: '2020', jumlah_kasus: '0' },
+    { tahun: '2021', jumlah_kasus: '5' },
+    { tahun: '2022', jumlah_kasus: '9' },
+    { tahun: '2023', jumlah_kasus: '9' },
+  ],
+  'desa:siliwanga': [
+    { tahun: '2017', jumlah_kasus: '2' },
+    { tahun: '2018', jumlah_kasus: '0' },
+    { tahun: '2019', jumlah_kasus: '0' },
+    { tahun: '2020', jumlah_kasus: '0' },
+    { tahun: '2021', jumlah_kasus: '0' },
+    { tahun: '2022', jumlah_kasus: '9' },
+    { tahun: '2023', jumlah_kasus: '1' },
+  ],
+  'desa:betue': [
+    { tahun: '2017', jumlah_kasus: '0' },
+    { tahun: '2018', jumlah_kasus: '0' },
+    { tahun: '2019', jumlah_kasus: '0' },
+    { tahun: '2020', jumlah_kasus: '0' },
+    { tahun: '2021', jumlah_kasus: '0' },
+    { tahun: '2022', jumlah_kasus: '0' },
+    { tahun: '2023', jumlah_kasus: '0' },
+  ],
+  'desa:torire': [
+    { tahun: '2017', jumlah_kasus: '1' },
+    { tahun: '2018', jumlah_kasus: '0' },
+    { tahun: '2019', jumlah_kasus: '0' },
+    { tahun: '2020', jumlah_kasus: '0' },
+    { tahun: '2021', jumlah_kasus: '1' },
+    { tahun: '2022', jumlah_kasus: '2' },
+    { tahun: '2023', jumlah_kasus: '0' },
+  ],
+};
 const Peta = () => {
-  const [gempaData, setGempaData] = useState({
-    title: 'Gempa Terkini',
-    status: 'success',
-    gempa_terkini: [],
-  });
+  // Function to extract data for each desa per year
+  const getCasesForYear = (desa, year) => {
+    const record = dataStatistik[desa].find((item) => item.tahun === year);
+    return record ? record.jumlah_kasus : '-';
+  };
 
-  useEffect(() => {
-    const getGempa = async () => {
-      try {
-        await axios.get('http://localhost:5055/terkini').then((res) => {
-          setGempaData(res.data);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getGempa();
-  });
+  const desaNames = Object.keys(dataStatistik);
 
   return (
     <>
@@ -81,43 +225,41 @@ const Peta = () => {
 
       <div className="container-xxl">
         <h2 className="blog-grid-title-lg mb-3" style={{ color: 'black' }}>
-          JUMLAH KASUS SCHISTOSOMIASIS DI KABUPATEN POSO TAHUN 2017-2023
+          JUMLAH KASUS SCHISTOSOMIASIS DI NAPU TAHUN 2017-2023
         </h2>
 
-        {gempaData.status === 'success' ? (
-          <table className="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Desa</th>
-                <th>2017</th>
-                <th>2018</th>
-                <th>2019</th>
-                <th>2020</th>
-                <th>2021</th>
-                <th>2022</th>
-                <th>2023</th>
+        <table className="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Desa</th>
+              <th>2017</th>
+              <th>2018</th>
+              <th>2019</th>
+              <th>2020</th>
+              <th>2021</th>
+              <th>2022</th>
+              <th>2023</th>
+            </tr>
+          </thead>
+          <tbody>
+            {desaNames.map((desa, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{desa.replace('desa:', '')}</td>
+                <td>{getCasesForYear(desa, '2017')}</td>
+                <td>{getCasesForYear(desa, '2018')}</td>
+                <td>{getCasesForYear(desa, '2019')}</td>
+                <td>{getCasesForYear(desa, '2020')}</td>
+                <td>{getCasesForYear(desa, '2021')}</td>
+                <td>{getCasesForYear(desa, '2022')}</td>
+                <td>{getCasesForYear(desa, '2023')}</td>
               </tr>
-            </thead>
-            <tbody>
-              {gempaData.gempa_terkini.map((data, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{data.waktu_gempa}</td>
-                  <td>{data.lintang}</td>
-                  <td>{data.bujur}</td>
-                  <td>{data.magnitudo}</td>
-                  <td>{data.kedalaman}</td>
-                  <td>{data.wilayah}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>Error fetching earthquake data</p>
-        )}
+            ))}
+          </tbody>
+        </table>
       </div>
-
+      <SchistoChart />
       <center>
         <div className="d-inline-block rounded-pill bg-secondary text-primary py-1 px-3 mt-2 mb-4">
           Peta Fokus Keong Di Lore Utara

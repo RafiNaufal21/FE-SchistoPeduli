@@ -162,11 +162,24 @@ const dataStatistik = {
 const Peta = () => {
   // Function to extract data for each desa per year
   const getCasesForYear = (desa, year) => {
-    const record = dataStatistik[desa].find((item) => item.tahun === year);
+    const record = dataStatistik[desa]?.find((item) => item.tahun === year);
     return record ? record.jumlah_kasus : '-';
   };
 
-  const desaNames = Object.keys(dataStatistik);
+  // Function to calculate total cases for each year
+  const getTotalCasesForYear = (year) => {
+    return desaNames.reduce((total, desa) => {
+      const cases = getCasesForYear(desa, year);
+      return total + (parseInt(cases) || 0); // Konversi ke angka dan tambahkan ke total
+    }, 0);
+  };
+
+  // Extract desa names from the dataStatistik object
+  const desaNames = dataStatistik ? Object.keys(dataStatistik) : [];
+
+  if (!dataStatistik || desaNames.length === 0) {
+    return <div>Loading...</div>; // Handle case when dataStatistik is not ready
+  }
 
   return (
     <>
@@ -256,6 +269,19 @@ const Peta = () => {
                 <td>{getCasesForYear(desa, '2023')}</td>
               </tr>
             ))}
+            {/* Baris total */}
+            <tr>
+              <td colSpan="2" style={{ fontWeight: 'bold' }}>
+                Total Napu
+              </td>
+              <td>{getTotalCasesForYear('2017')}</td>
+              <td>{getTotalCasesForYear('2018')}</td>
+              <td>{getTotalCasesForYear('2019')}</td>
+              <td>{getTotalCasesForYear('2020')}</td>
+              <td>{getTotalCasesForYear('2021')}</td>
+              <td>{getTotalCasesForYear('2022')}</td>
+              <td>{getTotalCasesForYear('2023')}</td>
+            </tr>
           </tbody>
         </table>
       </div>

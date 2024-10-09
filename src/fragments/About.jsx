@@ -48,14 +48,18 @@ const About = () => {
                   membantu kami melindungi lebih banyak orang dari resiko
                   infeksi.
                 </p>
-                <a href="/tentang">
-                  <Button variant="btn-primary py-2 px-3 me-3">
+                <a>
+                  <Button variant="btn-primary py-2 px-3 me-3" href="/tentang">
                     Lebih lanjut
                   </Button>
                 </a>
-                <Button variant="btn-outline-primary py-2 px-3 me-3">
-                  Hubungi kami
-                </Button>
+                <a>
+                  <Button
+                    variant="btn-outline-primary py-2 px-3 me-3"
+                    href="/tentang">
+                    Hubungi kami
+                  </Button>
+                </a>
               </div>
             </div>
           </div>

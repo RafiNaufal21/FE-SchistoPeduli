@@ -110,8 +110,7 @@ const Navbar = () => {
                 href="#"
                 className={`nav-link ${
                   location.pathname.includes('/eduschisto') ||
-                  location.pathname.includes('/deteksikeong') ||
-                  location.pathname.includes('/psikososial')
+                  location.pathname.includes('/deteksikeong')
                     ? 'active'
                     : ''
                 } dropdown-toggle`}

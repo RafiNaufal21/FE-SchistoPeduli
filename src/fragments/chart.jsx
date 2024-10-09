@@ -223,4 +223,5 @@ const SchistoColumnChart = () => {
   );
 };
 
+
 export default SchistoColumnChart;

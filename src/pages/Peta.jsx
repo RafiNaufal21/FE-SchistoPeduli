@@ -160,7 +160,7 @@ const Peta = () => {
             <div className="peta">
               <div className="map">
                 <MapContainer  center={[-1.3980, 120.3267]} zoom={13} style={{ height: '100vh', width: '100%',margin:"0 auto",backgroundColor:"blue" }}>
-                <TileLayer
+              <TileLayer
     url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png"
     attribution='&copy; <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>'
 />

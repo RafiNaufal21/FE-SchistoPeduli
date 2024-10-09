@@ -5,63 +5,45 @@ import Spinner from '../fragments/Spinner';
 import axios from 'axios';
 import { MapContainer, TileLayer, Polygon, Popup } from 'react-leaflet';
 
-const getStatistik = async() =>{
+const getStatistik = async () => {
   try {
-    const response = await axios.get('http://localhost:1945/statistik')
-    return response
-} catch (error) {
-    return error
-    }
-}
+    const response = await axios.get('http://localhost:1945/statistik');
+    return response.data; // Kembalikan data langsung
+  } catch (error) {
+    console.error('Error fetching statistik:', error);
+    return null; // Kembali null jika terjadi error
+  }
+};
 
 const Peta = () => {
-  // const [gempaData, setGempaData] = useState({
-  //   title: 'Gempa Terkini',
-  //   status: 'success',
-  //   gempa_terkini: [],
-  // });
+  const [statistik, setStatistik] = useState(null);
+  const [lokasi, setLokasi] = useState([]);
 
-  // useEffect(() => {
-  //   const getGempa = async () => {
-  //     try {
-  //       await axios.get('http://localhost:5055/terkini').then((res) => {
-  //         setGempaData(res.data);
-  //       });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   getGempa();
-  // });
-    const [statistik,setStatistik] = useState(null)
-    const [lokasi,setLokasi] = useState([])
+  const fetchData = async () => {
+    const res = await getStatistik();
+    setStatistik(res?.data_statistik);
+    console.log(res?.data_statistik);
+  };
 
-
-    const fetchData = async()=>{
+  useEffect(() => {
+    const fetchLokasi = async () => {
       try {
-        const res = await getStatistik();
-        setStatistik(res?.data?.data_statistik);
-        console.log(res?.data?.data_statistik)
+        const resp = await fetch('http://localhost:1945/lokasi');
+        const res = await resp.json();
+        setLokasi(res);
       } catch (error) {
-        console.log(error);
+        console.error('Error fetching polygons:', error);
       }
-    }
-    useEffect(() => {
-      const fetchLokasi = async()=>{
-        try {
-          const res = await fetch('http://localhost:1945/lokasi');
-          setPolygons(res);
-      } catch (error) {
-          console.error('Error fetching polygons:', error);
-      }
-      }
-      fetchData();
-      fetchLokasi();
-    }, []);
-    if (!statistik) {
-      return <div>Loading...</div>;
-    }
-    console.log(lokasi)
+    };
+
+    fetchData();
+    fetchLokasi();
+  }, []);
+
+  if (!statistik) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Spinner />
@@ -73,7 +55,8 @@ const Peta = () => {
             <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
               <div
                 className="position-relative overflow-hidden h-100"
-                style={{ minHeight: '400px' }}>
+                style={{ minHeight: '400px' }}
+              >
                 <img
                   className="position-absolute w-100 h-100 pt-5 pe-5"
                   src="img/Oncomelania_hupensis.jpg"
@@ -87,7 +70,7 @@ const Peta = () => {
                 <div className="d-inline-block rounded-pill bg-secondary text-primary py-1 px-3 mb-3">
                   Kawasan Rawan Keong Oncomelania
                 </div>
-                <h1 className="display-6 mb-5">Apa itu Keong Oncomelania ?</h1>
+                <h1 className="display-6 mb-5">Apa itu Keong Oncomelania?</h1>
                 <div className="bg-light border-bottom border-5 border-primary rounded p-4 mb-4">
                   <p className="text-dark mb-2">
                     Tahukah kamu kalau ada penyakit yang hanya ditemukan di
@@ -123,50 +106,46 @@ const Peta = () => {
         </h2>
 
         {statistik && (
-  <table className="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>No</th>
-        <th>Desa</th>
-        <th>2017</th>
-        <th>2018</th>
-        <th>2019</th>
-        <th>2020</th>
-        <th>2021</th>
-        <th>2022</th>
-        <th>2023</th>
-      </tr>
-    </thead>
-    <tbody>
-      {Object.keys(statistik).map((desaKey, index) => {
-        const data = statistik[desaKey]; // Ambil data untuk desa tertentu
-        const jumlahKasus = {}; // Inisialisasi objek untuk menyimpan jumlah kasus per tahun
+          <table className="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Desa</th>
+                <th>2017</th>
+                <th>2018</th>
+                <th>2019</th>
+                <th>2020</th>
+                <th>2021</th>
+                <th>2022</th>
+                <th>2023</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(statistik).map((desaKey, index) => {
+                const data = statistik[desaKey];
+                const jumlahKasus = {};
 
-        // Mengisi jumlah kasus per tahun
-        data.forEach(item => {
-          jumlahKasus[item.tahun] = item.jumlah_kasus; // Sesuaikan dengan struktur data
-        });
+                data.forEach(item => {
+                  jumlahKasus[item.tahun] = item.jumlah_kasus;
+                });
 
-        return (
-          <tr key={desaKey}>
-            <td>{index + 1}</td>
-            <td>{desaKey.replace('desa:', '')}</td> {/* Menghilangkan prefix 'desa:' */}
-            <td>{jumlahKasus[2017] || 0}</td>
-            <td>{jumlahKasus[2018] || 0}</td>
-            <td>{jumlahKasus[2019] || 0}</td>
-            <td>{jumlahKasus[2020] || 0}</td>
-            <td>{jumlahKasus[2021] || 0}</td>
-            <td>{jumlahKasus[2022] || 0}</td>
-            <td>{jumlahKasus[2023] || 0}</td>
-          </tr>
-        );
-      })}
-    </tbody>
-  </table>
-)}
-         {/* : (
-          <p>Error fetching earthquake data</p>
-        ) */}
+                return (
+                  <tr key={desaKey}>
+                    <td>{index + 1}</td>
+                    <td>{desaKey.replace('desa:', '')}</td>
+                    <td>{jumlahKasus[2017] || 0}</td>
+                    <td>{jumlahKasus[2018] || 0}</td>
+                    <td>{jumlahKasus[2019] || 0}</td>
+                    <td>{jumlahKasus[2020] || 0}</td>
+                    <td>{jumlahKasus[2021] || 0}</td>
+                    <td>{jumlahKasus[2022] || 0}</td>
+                    <td>{jumlahKasus[2023] || 0}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <center>
@@ -175,39 +154,22 @@ const Peta = () => {
         </div>
       </center>
 
-        <div className="container-fluid bg-light overflow-hidden px-lg-0">
-          <div className="container contact px-lg-0">
-            <div className="row g-0 mx-lg-0">
-              <div className="peta">
-                <div className="map">
-                <MapContainer center={[-1.3980, 120.3267]} zoom={13} style={{ height: '100vh', width: '100%' }}>
-            <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
-            {lokasi.map((polygon) => {
-                // Mengonversiastring WKT menjadi array koordinat
-                const coords = polygon.kordinat.split(',').map(coord => {
-                    const [lng, lat] = coord.trim().split(' ').map(Number);
-                    return [lat, lng]; // Leaflet menggunakan format [lat, lng]
-                });
-                return (
-                    <Polygon key={polygon.id} positions={coords} color="blue">
-                        <Popup>
-                        
-                            <strong>{polygon.nama}</strong><br />
-                            <h1>titik kordinat : {polygon.kordinat}</h1>
-                            
-                        </Popup>
-                    </Polygon>
-                );
-            })}
-        </MapContainer>
-                </div>
+      <div className="container-fluid bg-light overflow-hidden px-lg-0">
+        <div className="container contact px-lg-0">
+          <div className="row g-0 mx-lg-0">
+            <div className="peta">
+              <div className="map">
+                <MapContainer  center={[-1.3980, 120.3267]} zoom={13} style={{ height: '100vh', width: '100%',margin:"0 auto",backgroundColor:"blue" }}>
+                <TileLayer
+    url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png"
+    attribution='&copy; <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>'
+/>
+                </MapContainer>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
       <Footer />
     </>

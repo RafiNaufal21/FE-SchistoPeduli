@@ -18,8 +18,11 @@ import Tentang from "./pages/Tentang";
 import DetailArtikel from "./pages/Detail-artikel";
 import Error from "./pages/404";
 import LanjutDonasi from "./pages/LanjutDonasi";
+import 'leaflet/dist/leaflet.css';
 
 import Resetpassword from "./pages/Resetpassword";
+import PolygonMap from "./pages/poligon";
+import Map from "./pages/testing"
 
 const Router = createBrowserRouter([
   {
@@ -27,7 +30,15 @@ const Router = createBrowserRouter([
     element: <Home />,
     errorElement: <Error />,
   },
-
+  {
+    path: "/testing",
+    element:<Map/>,
+    errorElement:<Error/>
+  },
+  {
+    path:"/lokasi",
+    element:<PolygonMap/>
+  },
   {
     path: "/eduschisto",
     element: <Eduschisto />,

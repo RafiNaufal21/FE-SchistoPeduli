@@ -6,8 +6,8 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 const petugas = [
   {
-    nama: 'Rafi Naufal Y. R.',
-    jabatan: 'Ketua Lembaga',
+    nama: 'PAULUS MASSANG',
+    jabatan: 'PENANGGUNG JAWAB',
     imgSrc: 'img/rafi.png',
     whatsapp:
       'https://wa.me/6282273370260?text=Halo,%20saya%20ingin%20bertanya%20tentang%20layanan%20Anda',
@@ -15,8 +15,8 @@ const petugas = [
     instagram: 'https://www.instagram.com/rafinaufal_y.r/',
   },
   {
-    nama: 'Devi Yohana Samosir',
-    jabatan: 'Sekertaris',
+    nama: 'CERNI TOLU',
+    jabatan: 'STAFF',
     imgSrc: 'img/devi.png',
     whatsapp:
       'https://wa.me/6282273370260?text=Halo,%20saya%20ingin%20bertanya%20tentang%20layanan%20Anda',
@@ -24,8 +24,8 @@ const petugas = [
     instagram: 'https://www.instagram.com/xyhnas/',
   },
   {
-    nama: 'Alfiana Suci',
-    jabatan: 'Bendahara',
+    nama: 'RAJAB',
+    jabatan: 'STAFF',
     imgSrc: 'img/suci.png',
     whatsapp:
       'https://wa.me/6282273370260?text=Halo,%20saya%20ingin%20bertanya%20tentang%20layanan%20Anda',
@@ -33,8 +33,8 @@ const petugas = [
     instagram: 'https://instagram.com/alfianasuci?igshid=NzZlODBkYWE4Ng',
   },
   {
-    nama: 'Rifqi Nanda',
-    jabatan: 'Petugas Lapangan',
+    nama: 'SYAMSUDIN',
+    jabatan: 'STAFF',
     imgSrc: 'img/rifqi.png',
     whatsapp:
       'https://wa.me/6282273370260?text=Halo,%20saya%20ingin%20bertanya%20tentang%20layanan%20Anda',
@@ -42,8 +42,8 @@ const petugas = [
     instagram: 'https://instagram.com/_rifqi_1496',
   },
   {
-    nama: 'Vio Fatikhi A.',
-    jabatan: 'Petugas Inti',
+    nama: 'MOH.IRSAN Amd.Kep',
+    jabatan: 'STAFF',
     imgSrc: 'img/vio.png',
     whatsapp:
       'https://wa.me/6282273370260?text=Halo,%20saya%20ingin%20bertanya%20tentang%20layanan%20Anda',

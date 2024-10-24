@@ -1,209 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import ApexCharts from 'react-apexcharts';
+import axios from 'axios';
 
-// Data kasus schistosomiasis
-const dataStatistik = {
-  'desa:wuasa': [
-    { tahun: '2017', jumlah_kasus: '1' },
-    { tahun: '2018', jumlah_kasus: '0' },
-    { tahun: '2019', jumlah_kasus: '1' },
-    { tahun: '2020', jumlah_kasus: '1' },
-    { tahun: '2021', jumlah_kasus: '2' },
-    { tahun: '2022', jumlah_kasus: '16' },
-    { tahun: '2023', jumlah_kasus: '3' },
-  ],
-  'desa:watumaeta': [
-    { tahun: '2017', jumlah_kasus: '8' },
-    { tahun: '2018', jumlah_kasus: '4' },
-    { tahun: '2019', jumlah_kasus: '0' },
-    { tahun: '2020', jumlah_kasus: '0' },
-    { tahun: '2021', jumlah_kasus: '5' },
-    { tahun: '2022', jumlah_kasus: '13' },
-    { tahun: '2023', jumlah_kasus: '2' },
-  ],
-  'desa:banyusari': [
-    { tahun: '2017', jumlah_kasus: '5' },
-    { tahun: '2018', jumlah_kasus: '2' },
-    { tahun: '2019', jumlah_kasus: '0' },
-    { tahun: '2020', jumlah_kasus: '0' },
-    { tahun: '2021', jumlah_kasus: '0' },
-    { tahun: '2022', jumlah_kasus: '5' },
-    { tahun: '2023', jumlah_kasus: '0' },
-  ],
-  'desa:sedoa': [
-    { tahun: '2017', jumlah_kasus: '11' },
-    { tahun: '2018', jumlah_kasus: '4' },
-    { tahun: '2019', jumlah_kasus: '0' },
-    { tahun: '2020', jumlah_kasus: '3' },
-    { tahun: '2021', jumlah_kasus: '0' },
-    { tahun: '2022', jumlah_kasus: '17' },
-    { tahun: '2023', jumlah_kasus: '3' },
-  ],
-  'desa:kaduwaa': [
-    { tahun: '2017', jumlah_kasus: '8' },
-    { tahun: '2018', jumlah_kasus: '1' },
-    { tahun: '2019', jumlah_kasus: '0' },
-    { tahun: '2020', jumlah_kasus: '0' },
-    { tahun: '2021', jumlah_kasus: '1' },
-    { tahun: '2022', jumlah_kasus: '5' },
-    { tahun: '2023', jumlah_kasus: '14' },
-  ],
-  'desa:alitupu': [
-    { tahun: '2017', jumlah_kasus: '14' },
-    { tahun: '2018', jumlah_kasus: '7' },
-    { tahun: '2019', jumlah_kasus: '0' },
-    { tahun: '2020', jumlah_kasus: '4' },
-    { tahun: '2021', jumlah_kasus: '5' },
-    { tahun: '2022', jumlah_kasus: '38' },
-    { tahun: '2023', jumlah_kasus: '21' },
-  ],
-  'desa:tamadue': [
-    { tahun: '2017', jumlah_kasus: '30' },
-    { tahun: '2018', jumlah_kasus: '8' },
-    { tahun: '2019', jumlah_kasus: '5' },
-    { tahun: '2020', jumlah_kasus: '4' },
-    { tahun: '2021', jumlah_kasus: '8' },
-    { tahun: '2022', jumlah_kasus: '39' },
-    { tahun: '2023', jumlah_kasus: '18' },
-  ],
-  'desa:mekarsari': [
-    { tahun: '2017', jumlah_kasus: '16' },
-    { tahun: '2018', jumlah_kasus: '5' },
-    { tahun: '2019', jumlah_kasus: '3' },
-    { tahun: '2020', jumlah_kasus: '3' },
-    { tahun: '2021', jumlah_kasus: '3' },
-    { tahun: '2022', jumlah_kasus: '26' },
-    { tahun: '2023', jumlah_kasus: '15' },
-  ],
-  'desa:maholo': [
-    { tahun: '2017', jumlah_kasus: '8' },
-    { tahun: '2018', jumlah_kasus: '2' },
-    { tahun: '2019', jumlah_kasus: '2' },
-    { tahun: '2020', jumlah_kasus: '1' },
-    { tahun: '2021', jumlah_kasus: '4' },
-    { tahun: '2022', jumlah_kasus: '22' },
-    { tahun: '2023', jumlah_kasus: '15' },
-  ],
-  'desa:winowanga': [
-    { tahun: '2017', jumlah_kasus: '25' },
-    { tahun: '2018', jumlah_kasus: '8' },
-    { tahun: '2019', jumlah_kasus: '1' },
-    { tahun: '2020', jumlah_kasus: '3' },
-    { tahun: '2021', jumlah_kasus: '5' },
-    { tahun: '2022', jumlah_kasus: '28' },
-    { tahun: '2023', jumlah_kasus: '19' },
-  ],
-  'desa:dodolo': [
-    { tahun: '2017', jumlah_kasus: '17' },
-    { tahun: '2018', jumlah_kasus: '7' },
-    { tahun: '2019', jumlah_kasus: '1' },
-    { tahun: '2020', jumlah_kasus: '3' },
-    { tahun: '2021', jumlah_kasus: '5' },
-    { tahun: '2022', jumlah_kasus: '10' },
-    { tahun: '2023', jumlah_kasus: '10' },
-  ],
-  'desa:watutau': [
-    { tahun: '2017', jumlah_kasus: '5' },
-    { tahun: '2018', jumlah_kasus: '0' },
-    { tahun: '2019', jumlah_kasus: '0' },
-    { tahun: '2020', jumlah_kasus: '1' },
-    { tahun: '2021', jumlah_kasus: '3' },
-    { tahun: '2022', jumlah_kasus: '3' },
-    { tahun: '2023', jumlah_kasus: '6' },
-  ],
-  'desa:wanga': [
-    { tahun: '2017', jumlah_kasus: '2' },
-    { tahun: '2018', jumlah_kasus: '1' },
-    { tahun: '2019', jumlah_kasus: '4' },
-    { tahun: '2020', jumlah_kasus: '0' },
-    { tahun: '2021', jumlah_kasus: '1' },
-    { tahun: '2022', jumlah_kasus: '4' },
-    { tahun: '2023', jumlah_kasus: '22' },
-  ],
-  'desa:kalemago': [
-    { tahun: '2017', jumlah_kasus: '11' },
-    { tahun: '2018', jumlah_kasus: '4' },
-    { tahun: '2019', jumlah_kasus: '1' },
-    { tahun: '2020', jumlah_kasus: '0' },
-    { tahun: '2021', jumlah_kasus: '5' },
-    { tahun: '2022', jumlah_kasus: '9' },
-    { tahun: '2023', jumlah_kasus: '9' },
-  ],
-  'desa:siliwanga': [
-    { tahun: '2017', jumlah_kasus: '2' },
-    { tahun: '2018', jumlah_kasus: '0' },
-    { tahun: '2019', jumlah_kasus: '0' },
-    { tahun: '2020', jumlah_kasus: '0' },
-    { tahun: '2021', jumlah_kasus: '0' },
-    { tahun: '2022', jumlah_kasus: '9' },
-    { tahun: '2023', jumlah_kasus: '1' },
-  ],
-  'desa:betue': [
-    { tahun: '2017', jumlah_kasus: '0' },
-    { tahun: '2018', jumlah_kasus: '0' },
-    { tahun: '2019', jumlah_kasus: '0' },
-    { tahun: '2020', jumlah_kasus: '0' },
-    { tahun: '2021', jumlah_kasus: '0' },
-    { tahun: '2022', jumlah_kasus: '0' },
-    { tahun: '2023', jumlah_kasus: '0' },
-  ],
-  'desa:torire': [
-    { tahun: '2017', jumlah_kasus: '1' },
-    { tahun: '2018', jumlah_kasus: '0' },
-    { tahun: '2019', jumlah_kasus: '0' },
-    { tahun: '2020', jumlah_kasus: '0' },
-    { tahun: '2021', jumlah_kasus: '1' },
-    { tahun: '2022', jumlah_kasus: '2' },
-    { tahun: '2023', jumlah_kasus: '0' },
-  ],
-};
 const SchistoColumnChart = () => {
   const [chartOptions, setChartOptions] = useState({});
   const [chartSeries, setChartSeries] = useState([]);
+  const [dataStatistik, setStatistik] = useState(null);
+
+  const getStatistik = async () => {
+    try {
+      const response = await axios.get('http://localhost:1945/statistik');
+      console.log("Fetched data:", response.data);
+      return response.data; // Kembalikan data langsung
+    } catch (error) {
+      console.error('Error fetching statistik:', error);
+      return null; // Kembali null jika terjadi error
+    }
+  };
+
+  const fetchData = async () => {
+    const res = await getStatistik();
+    setStatistik(res?.data_statistik); // Simpan data statistik ke state
+  };
 
   useEffect(() => {
-    // Extract years (sumbu X)
-    const years = dataStatistik['desa:wuasa'].map((item) => item.tahun);
-
-    // Extract jumlah kasus for each desa (sumbu Y)
-    const seriesData = Object.keys(dataStatistik).map((desa) => {
-      return {
-        name: desa.replace('desa:', ''), // Nama desa untuk legend
-        data: dataStatistik[desa].map((item) => item.jumlah_kasus), // Data jumlah kasus per tahun
-      };
-    });
-
-    // Set chart options and series
-    setChartOptions({
-      chart: {
-        type: 'bar', // Tetap menggunakan 'bar'
-        height: 350,
-      },
-      xaxis: {
-        categories: years, // Tahun sebagai kategori di sumbu X
-      },
-      title: {
-        text: 'KASUS SCHISTOSOMIASIS DI NAPU (2017-2023) - Column Chart',
-        align: 'center',
-      },
-      yaxis: {
-        title: {
-          text: 'Jumlah Kasus',
-        },
-      },
-      legend: {
-        position: 'top',
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false, // Pastikan horizontal diatur ke false untuk column chart
-          columnWidth: '70%', // Lebar kolom, bisa disesuaikan
-        },
-      },
-    });
-
-    setChartSeries(seriesData);
+    fetchData(); // Panggil fungsi ambil data saat komponen dimuat
   }, []);
+
+  useEffect(() => {
+    if (dataStatistik) {
+      // Pastikan dataStatistik tidak null sebelum memprosesnya
+      const years = dataStatistik['desa:wuasa'].map((item) => item.tahun);
+
+      // Extract jumlah kasus for each desa (sumbu Y)
+      const seriesData = Object.keys(dataStatistik).map((desa) => ({
+        name: desa.replace('desa:', ''), // Nama desa untuk legend
+        data: dataStatistik[desa].map((item) => Number(item.jumlah_kasus)), // Data jumlah kasus per tahun
+      }));
+
+      // Set chart options and series
+      setChartOptions({
+        chart: {
+          type: 'bar', // Tetap menggunakan 'bar'
+          height: 350,
+        },
+        xaxis: {
+          categories: years, // Tahun sebagai kategori di sumbu X
+        },
+        title: {
+          text: 'KASUS SCHISTOSOMIASIS DI NAPU (2017-2023) - Column Chart',
+          align: 'center',
+        },
+        yaxis: {
+          title: {
+            text: 'Jumlah Kasus',
+          },
+        },
+        legend: {
+          position: 'top',
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false, // Pastikan horizontal diatur ke false untuk column chart
+            columnWidth: '70%', // Lebar kolom, bisa disesuaikan
+          },
+        },
+      });
+
+      setChartSeries(seriesData);
+    }
+  }, [dataStatistik]); // Tambahkan dataStatistik sebagai dependensi
 
   return (
     <div>
@@ -222,6 +88,5 @@ const SchistoColumnChart = () => {
     </div>
   );
 };
-
 
 export default SchistoColumnChart;

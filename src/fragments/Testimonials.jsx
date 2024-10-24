@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
+import axios from 'axios';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import 'owl.carousel';
@@ -31,7 +32,27 @@ const testimonials = [
   },
 ];
 
+const keluhan = async() =>{
+  try {
+    const res = await axios.get("http://localhost:1945/keluhan")
+    return res.data
+  } catch (error) {
+    console.log(error)
+    return null;
+  }
+}
+
 const TestimonialCarousel = () => {
+  const [keluhan,setKeluhan] = useState([])
+
+  const fetchData = async() =>{
+    const res = await keluhan()
+    setKeluhan(res)
+  } 
+  useEffect(()=>{
+    fetchData()
+  },[])
+console.log(keluhan)
   useEffect(() => {
     // Initialize Owl Carousel
     $('.testimonial-carousel').owlCarousel({

@@ -55,7 +55,7 @@ const Peta = () => {
       try {
         const res = await fetch("http://localhost:1945/jml");
         const resp = await res.json();
-        setDesa(resp);
+        setDesa(resp.desa);
       } catch (error) {
         console.log("error : ", error);
       }
@@ -206,15 +206,16 @@ const Peta = () => {
               </div>
             </center>
             <MapContainer
-              center={[-1.396505, 120.314869]}
-              zoom={13}
-              style={{ height: "100vh", width: "70%", margin: "0 auto" }}
+              center={[-1.348673815442008, 120.32989150111356]}
+              zoom={11}
+              style={{ height: "100vh", width: "90%", margin: "0 auto" }}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
 
+              {/* untuk titik desa */}
               {desa.map((desa) => {
                 const coords = desa.kordinat
                   .replace("POLYGON((", "")
@@ -224,28 +225,60 @@ const Peta = () => {
                     const [lng, lat] = coord.trim().split(" ").map(Number);
                     return [lat, lng]; // Leaflet menggunakan format [lat, lng]
                   });
-                const centroid = coords.length
-                  ? [
-                      coords.reduce((sum, coord) => sum + coord[0], 0) /
-                        coords.length,
-                      coords.reduce((sum, coord) => sum + coord[1], 0) /
-                        coords.length,
-                    ]
-                  : [0, 0]; // Jika tidak ada koordinat, gunakan 0,0
 
+                  //algortima decision tree untuk pengelompokkan desa dengan titik keong terbanyak
+                  function getColorDecisionTree(jumlahKordinat) {
+                    if (jumlahKordinat > 30) {
+                        return "red";
+                    } else if (jumlahKordinat > 20) {
+                        return "orange";
+                    } else if (jumlahKordinat > 10) {
+                        return "yellow";
+                    } else {
+                        return "green";
+                    }
+                }
                 return (
-                  <Polygon key={desa.id} positions={coords} color="blue">
+                  <Polygon
+                    key={desa.id}
+                    positions={coords}
+                    color={
+                      getColorDecisionTree(desa.jumlah_kordinat)
+                    }
+                  >
+                    
                     <Tooltip permanent>
                       <strong>{desa.nama_desa}</strong>
                     </Tooltip>
                     <Popup>
-                      <strong>jumlah titik keong di desa {desa.nama_desa} sebanyak {desa.jumlah_kordinat} titik</strong>
+                      <strong>
+                        Desa {desa.nama_desa}
+                      </strong>
+                      <p>Jumlah titik keong sebanyak{" "}
+                      {desa.jumlah_kordinat} titik</p>
                     </Popup>
                   </Polygon>
                 );
               })}
-
-              {Object.entries(
+              {lokasi.map((lokasi) => {
+                const [lng, lat] = lokasi.kordinat.split(" ").map(Number);
+                // Cek apakah lng dan lat valid
+                if (isNaN(lng) || isNaN(lat)) {
+                  console.error("Koordinat tidak valid:", lokasi.kordinat);
+                  return null; // Kembalikan null jika koordinat tidak valid
+                }
+                return (
+                  <Marker key={lokasi.id} position={[lat, lng]}>
+                    <Popup>
+                      <strong>{lokasi.nama}</strong>
+                      <br />
+                      <p>titik kordinat : {lokasi.kordinat}</p>
+                    </Popup>
+                  </Marker>
+                );
+              })}
+              {/* untuk data titik keong */}
+              {/* {Object.entries(
                 lokasi.reduce((acc, polygon) => {
                   const coords = polygon.kordinat
                     .replace("POLYGON((", "")
@@ -255,7 +288,7 @@ const Peta = () => {
                       const [lng, lat] = coord.trim().split(" ").map(Number);
                       return [lat, lng];
                     });
-
+                      
                   const centroid = coords.length
                     ? [
                         coords.reduce((sum, coord) => sum + coord[0], 0) /
@@ -299,11 +332,13 @@ const Peta = () => {
                   );
                 }
                 return null;
-              })}
+              })} */}
             </MapContainer>
           </div>
         </div>
       </div>
+
+
 
       <Footer />
     </>

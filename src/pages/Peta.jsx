@@ -55,7 +55,7 @@ const Peta = () => {
       try {
         const res = await fetch("http://localhost:1945/jml");
         const resp = await res.json();
-        setDesa(resp);
+        setDesa(resp.desa);
       } catch (error) {
         console.log("error : ", error);
       }

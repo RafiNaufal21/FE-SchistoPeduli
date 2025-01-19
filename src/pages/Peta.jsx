@@ -39,6 +39,7 @@ const Peta = () => {
   const fetchData = async () => {
     const res = await getStatistik();
     setStatistik(res?.data_statistik);
+    console.log(res)
   };
 
   useEffect(() => {
@@ -74,6 +75,7 @@ const Peta = () => {
   const totalKasus = {};
   Object.keys(statistik).forEach((desaKey) => {
     const data = statistik[desaKey];
+    console.log("object",data)
     data.forEach((item) => {
       totalKasus[item.tahun] =
         (totalKasus[item.tahun] || 0) + Number(item.jumlah_kasus);
@@ -160,8 +162,8 @@ const Peta = () => {
               {Object.keys(statistik).map((desaKey, index) => {
                 const data = statistik[desaKey];
                 const jumlahKasus = {};
-
-                data.forEach((item) => {
+                
+                data.forEach((item) => {    
                   jumlahKasus[item.tahun] = item.jumlah_kasus;
                 });
 
@@ -198,7 +200,7 @@ const Peta = () => {
 
       <SchistoChart />
       <div className="container-fluid bg-light overflow-hidden px-lg-0">
-        <div className="container contact px-lg-0">
+        <div className="contact px-lg-0">
           <div className="row g-0 mx-lg-0">
             <center>
               <div className="d-inline-block rounded-pill bg-secondary text-primary py-1 px-3 mt-2 mb-4">
@@ -208,12 +210,15 @@ const Peta = () => {
             <MapContainer
               center={[-1.348673815442008, 120.32989150111356]}
               zoom={11}
-              style={{ height: "100vh", width: "90%", margin: "0 auto" }}
+              style={{ height: "70vh", width: "70%", margin: "0 auto" }}
             >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              />
+<TileLayer
+                url='https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF1ZmFsaGFtYmFsaTY1IiwiYSI6ImNtMnd4eWdlZDBidjYyanBwaHJnZ3FrbHAifQ.mJdw4Ew-5zOyObCXR8akhg'
+                attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, 
+                            <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, 
+                            Imagery <a href="https://www.mapbox.com/">Mapbox</a>'
+                id='mapbox/satellite-streets-v12'
+            />
 
               {/* untuk titik desa */}
               {desa.map((desa) => {

@@ -22,7 +22,9 @@ import 'leaflet/dist/leaflet.css';
 
 import Resetpassword from "./pages/Resetpassword";
 import PolygonMap from "./pages/poligon";
-import Map from "./pages/testing"
+// import Map from "./pages/testing"
+// import Dashboard from "./admin/dashboard";
+
 
 const Router = createBrowserRouter([
   {
@@ -30,11 +32,11 @@ const Router = createBrowserRouter([
     element: <Home />,
     errorElement: <Error />,
   },
-  {
-    path: "/testing",
-    element:<Map/>,
-    errorElement:<Error/>
-  },
+  // {
+  //   path:"/dashboard",
+  //   element:<Dashboard/>
+  // },
+
   {
     path:"/lokasi",
     element:<PolygonMap/>

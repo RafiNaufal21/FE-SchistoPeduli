@@ -1,7 +1,8 @@
 // src/Kamera.js
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-import '../css/kamera.css'; // Pastikan untuk membuat file CSS terpisah untuk styling
+import Navbar from './Navbar';
+import Footer from './Footer';
+import * as tf from '@tensorflow/tfjs'; // Import TensorFlow.js
 
 const Kamera = () => {
   const [predictions, setPredictions] = useState([]);

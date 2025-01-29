@@ -29,8 +29,11 @@ const SchistoColumnChart = () => {
 
   useEffect(() => {
     if (dataStatistik) {
-      // Pastikan dataStatistik tidak null sebelum memprosesnya
-      const years = dataStatistik['desa:wuasa'].map((item) => item.tahun);
+      // Mendapatkan tahun dari salah satu desa
+      const years = Object.values(dataStatistik).flatMap(desa => 
+        desa.map(item => item.tahun)
+      );
+      const uniqueYears = [...new Set(years)]; // Ambil tahun unik
 
       // Extract jumlah kasus for each desa (sumbu Y)
       const seriesData = Object.keys(dataStatistik).map((desa) => ({
@@ -45,7 +48,7 @@ const SchistoColumnChart = () => {
           height: 350,
         },
         xaxis: {
-          categories: years, // Tahun sebagai kategori di sumbu X
+          categories: uniqueYears, // Tahun sebagai kategori di sumbu X
         },
         title: {
           text: 'KASUS SCHISTOSOMIASIS DI NAPU (2017-2023) - Column Chart',
@@ -68,13 +71,29 @@ const SchistoColumnChart = () => {
       });
 
       setChartSeries(seriesData);
+    } else {
+      // Fallback jika tidak ada data
+      setChartSeries([]);
+      setChartOptions({
+        chart: {
+          type: 'bar',
+          height: 350,
+        },
+        xaxis: {
+          categories: [],
+        },
+        title: {
+          text: 'Data tidak tersedia',
+          align: 'center',
+        },
+      });
     }
   }, [dataStatistik]); // Tambahkan dataStatistik sebagai dependensi
 
   return (
     <div>
       <div className="container-fluid bg-light overflow-hidden px-lg-0">
-        <div className="container contact px-lg-0">
+        <div className="contact px-lg-0">
           <div className="row g-0 mx-lg-0">
             <ApexCharts
               options={chartOptions}

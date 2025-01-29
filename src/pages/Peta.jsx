@@ -16,7 +16,11 @@ import {
 
 const getStatistik = async () => {
   try {
-    const response = await axios.get("http://localhost:1945/statistik");
+    const response = await axios.get("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/statistik",{
+      headers: {
+        "ngrok-skip-browser-warning": "69420",
+        },
+    });
     return response.data; // Kembalikan data langsung
   } catch (error) {
     console.error("Error fetching statistik:", error);
@@ -39,12 +43,17 @@ const Peta = () => {
   const fetchData = async () => {
     const res = await getStatistik();
     setStatistik(res?.data_statistik);
+    console.log(res);
   };
 
   useEffect(() => {
     const fetchLokasi = async () => {
       try {
-        const resp = await fetch("http://localhost:1945/lokasi");
+        const resp = await fetch("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/lokasi",{
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+            },
+        });
         const res = await resp.json();
         setLokasi(res);
       } catch (error) {
@@ -53,7 +62,11 @@ const Peta = () => {
     };
     const fetchDesa = async () => {
       try {
-        const res = await fetch("http://localhost:1945/jml");
+        const res = await fetch("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/jml",{
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+            },
+        });
         const resp = await res.json();
         setDesa(resp.desa);
       } catch (error) {
@@ -74,6 +87,7 @@ const Peta = () => {
   const totalKasus = {};
   Object.keys(statistik).forEach((desaKey) => {
     const data = statistik[desaKey];
+    console.log("object", data);
     data.forEach((item) => {
       totalKasus[item.tahun] =
         (totalKasus[item.tahun] || 0) + Number(item.jumlah_kasus);
@@ -198,23 +212,29 @@ const Peta = () => {
 
       <SchistoChart />
       <div className="container-fluid bg-light overflow-hidden px-lg-0">
-        <div className="container contact px-lg-0">
+        <div className="contact px-lg-0">
           <div className="row g-0 mx-lg-0">
             <center>
               <div className="d-inline-block rounded-pill bg-secondary text-primary py-1 px-3 mt-2 mb-4">
                 Peta Fokus Keong Di Lore Utara
               </div>
             </center>
-            <MapContainer
-              center={[-1.396505, 120.314869]}
-              zoom={13}
-              style={{ height: "100vh", width: "70%", margin: "0 auto" }}
+    a        <MapContainer
+              center={[-1.348673815442008, 120.32989150111356]}
+              zoom={11}
+              style={{ height: "70vh", width: "70%", margin: "0 auto" }}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                // url='https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF1ZmFsaGFtYmFsaTY1IiwiYSI6ImNtMnd4eWdlZDBidjYyanBwaHJnZ3FrbHAifQ.mJdw4Ew-5zOyObCXR8akhg'
+                // attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors,
+                //             <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,
+                //             Imagery <a href="https://www.mapbox.com/">Mapbox</a>'
+                // id='mapbox/satellite-streets-v12'
               />
 
+              {/* untuk titik desa */}
               {desa.map((desa) => {
                 const coords = desa.kordinat
                   .replace("POLYGON((", "")
@@ -224,28 +244,56 @@ const Peta = () => {
                     const [lng, lat] = coord.trim().split(" ").map(Number);
                     return [lat, lng]; // Leaflet menggunakan format [lat, lng]
                   });
-                const centroid = coords.length
-                  ? [
-                      coords.reduce((sum, coord) => sum + coord[0], 0) /
-                        coords.length,
-                      coords.reduce((sum, coord) => sum + coord[1], 0) /
-                        coords.length,
-                    ]
-                  : [0, 0]; // Jika tidak ada koordinat, gunakan 0,0
 
+                //algortima decision tree untuk pengelompokkan desa dengan titik keong terbanyak
+                function getColorDecisionTree(jumlahKordinat) {
+                  if (jumlahKordinat > 30) {
+                    return "red";
+                  } else if (jumlahKordinat > 20) {
+                    return "orange";
+                  } else if (jumlahKordinat > 10) {
+                    return "yellow";
+                  } else {
+                    return "green";
+                  }
+                }
                 return (
-                  <Polygon key={desa.id} positions={coords} color="blue">
+                  <Polygon
+                    key={desa.id}
+                    positions={coords}
+                    color={getColorDecisionTree(desa.jumlah_kordinat)}
+                  >
                     <Tooltip permanent>
                       <strong>{desa.nama_desa}</strong>
                     </Tooltip>
                     <Popup>
-                      <strong>jumlah titik keong di desa {desa.nama_desa} sebanyak {desa.jumlah_kordinat} titik</strong>
+                      <strong>Desa {desa.nama_desa}</strong>
+                      <p>
+                        Jumlah titik keong sebanyak {desa.jumlah_kordinat} titik
+                      </p>
                     </Popup>
                   </Polygon>
                 );
               })}
-
-              {Object.entries(
+              {lokasi.map((lokasi) => {
+                const [lng, lat] = lokasi.kordinat.split(" ").map(Number);
+                // Cek apakah lng dan lat valid
+                if (isNaN(lng) || isNaN(lat)) {
+                  console.error("Koordinat tidak valid:", lokasi.kordinat);
+                  return null; // Kembalikan null jika koordinat tidak valid
+                }
+                return (
+                  <Marker key={lokasi.id} position={[lat, lng]}>
+                    <Popup>
+                      <strong>{lokasi.nama}</strong>
+                      <br />
+                      <p>titik kordinat : {lokasi.kordinat}</p>
+                    </Popup>
+                  </Marker>
+                );
+              })}
+              {/* untuk data titik keong */}
+              {/* {Object.entries(
                 lokasi.reduce((acc, polygon) => {
                   const coords = polygon.kordinat
                     .replace("POLYGON((", "")
@@ -255,7 +303,7 @@ const Peta = () => {
                       const [lng, lat] = coord.trim().split(" ").map(Number);
                       return [lat, lng];
                     });
-
+                      
                   const centroid = coords.length
                     ? [
                         coords.reduce((sum, coord) => sum + coord[0], 0) /
@@ -299,7 +347,7 @@ const Peta = () => {
                   );
                 }
                 return null;
-              })}
+              })} */}
             </MapContainer>
           </div>
         </div>

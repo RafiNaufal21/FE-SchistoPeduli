@@ -16,7 +16,11 @@ import {
 
 const getStatistik = async () => {
   try {
-    const response = await axios.get("http://localhost:1945/statistik");
+    const response = await axios.get("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/statistik",{
+      headers: {
+        "ngrok-skip-browser-warning": "69420",
+        },
+    });
     return response.data; // Kembalikan data langsung
   } catch (error) {
     console.error("Error fetching statistik:", error);
@@ -45,7 +49,7 @@ const Peta = () => {
   useEffect(() => {
     const fetchLokasi = async () => {
       try {
-        const resp = await fetch("http://localhost:1945/lokasi",{
+        const resp = await fetch("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/lokasi",{
           headers: {
             "ngrok-skip-browser-warning": "69420",
             },
@@ -58,7 +62,7 @@ const Peta = () => {
     };
     const fetchDesa = async () => {
       try {
-        const res = await fetch("http://localhost:1945/jml",{
+        const res = await fetch("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/jml",{
           headers: {
             "ngrok-skip-browser-warning": "69420",
             },
@@ -288,62 +292,8 @@ const Peta = () => {
                   </Marker>
                 );
               })}
-              {/* untuk data titik keong */}
-              {/* {Object.entries(
-                lokasi.reduce((acc, polygon) => {
-                  const coords = polygon.kordinat
-                    .replace("POLYGON((", "")
-                    .replace("))", "")
-                    .split(",")
-                    .map((coord) => {
-                      const [lng, lat] = coord.trim().split(" ").map(Number);
-                      return [lat, lng];
-                    });
-                      
-                  const centroid = coords.length
-                    ? [
-                        coords.reduce((sum, coord) => sum + coord[0], 0) /
-                          coords.length,
-                        coords.reduce((sum, coord) => sum + coord[1], 0) /
-                          coords.length,
-                      ]
-                    : [0, 0];
-
-                  if (!acc[polygon.nama]) {
-                    acc[polygon.nama] = {
-                      coords,
-                      centroid,
-                      jenis: polygon.jenis,
-                    };
-                  } else {
-                    acc[polygon.nama].coords.push(...coords);
-                  }
-                  return acc;
-                }, {})
-              ).map(([nama, group]) => {
-                if (group.jenis === "poligon") {
-                  return (
-                    <Polygon key={nama} positions={group.coords} color="blue">
-                      <Marker position={group.centroid}>
-                        <Popup>
-                          <strong>{nama}</strong>
-                        </Popup>
-                      </Marker>
-                    </Polygon>
-                  );
-                } else if (group.jenis === "polyline") {
-                  return (
-                    <Polyline key={nama} positions={group.coords} color="blue">
-                      <Marker position={group.centroid}>
-                        <Popup>
-                          <strong>{nama}</strong>
-                        </Popup>
-                      </Marker>
-                    </Polyline>
-                  );
-                }
-                return null;
-              })} */}
+           
+  
             </MapContainer>
           </div>
         </div>

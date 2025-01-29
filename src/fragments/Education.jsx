@@ -4,7 +4,11 @@ import axios from "axios";
 
 const getEdukasi = async () => {
   try {
-    const response = await axios.get("http://localhost:1945/edukasi");
+    const response = await axios.get("https://3e21-180-247-46-208.ngrok-free.app/edukasi",{
+      headers: {
+        "ngrok-skip-browser-warning": "69420",
+        },
+    });
     return response;
   } catch (error) {
     console.error(error);

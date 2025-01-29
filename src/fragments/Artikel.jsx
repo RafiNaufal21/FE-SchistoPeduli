@@ -3,89 +3,11 @@ import '../css/Artikel.css';
 import axios from 'axios';
 import { useEffect,useState } from 'react';
 
-// const artikelData = [
-//   {
-//     id: 1,
-//     foto: '/img/keongoncom.jpeg',
-//     kategori: 'keong',
-//     judul: 'Bagaimana Penyebaran Penyakit Schistosomiasis',
-//     position: 'top', // Posisi untuk Trending Top
-//   },
-//   {
-//     id: 2,
-//     foto: '/img/carousel-1.png',
-//     category: 'Penyuluhan',
-//     title: 'Penyuluhan ke desa watumaeta',
-//     position: 'bottom',
-//   },
-//   {
-//     id: 3,
-//     foto: '/img/penyebaran.jpg',
-//     category: 'Schistosomiasis',
-//     title: 'Apa itu Schistosomiasis',
-//     position: 'bottom',
-//   },
-//   {
-//     id: 4,
-//     foto: '/img/penyebaran.jpg',
-//     category: 'Schistosomiasis',
-//     title: 'Apa itu Schistosomiasis',
-//     position: 'bottom',
-//   },
-//   {
-//     id: 5,
-//     foto: '/img/penyebaran.jpg',
-//     category: 'Schistosomiasis',
-//     title: 'Apa itu Schistosomiasis',
-//     position: 'right', // Posisi untuk Right Content
-//   },
-//   {
-//     id: 6,
-//     foto: '/img/penyebaran.jpg',
-//     category: 'Schistosomiasis',
-//     title: 'Apa itu Schistosomiasis',
-//     position: 'right',
-//   },
-//   {
-//     id: 7,
-//     foto: '/img/penyebaran.jpg',
-//     category: 'Schistosomiasis',
-//     title: 'Apa itu Schistosomiasis',
-//     position: 'right',
-//   },
-//   {
-//     id: 8,
-//     foto: '/img/trending/right4.jpg',
-//     category: 'Sea Beach',
-//     title: 'Welcome To The Best Model Winner Contest',
-//     position: 'right',
-//   },
-//   {
-//     id: 9,
-//     foto: '/img/trending/right5.jpg',
-//     category: 'Skeping',
-//     title: 'Welcome To The Best Model Winner Contest',
-//     position: 'right',
-//   },
-//   {
-//     id: 10,
-//     foto: '/img/trending/trending_bottom2.jpg',
-//     category: 'Sports',
-//     title: 'Get the Illusion of Fuller Lashes by “Mascng.”',
-//     position: 'bottom',
-//   },
-//   {
-//     id: 11,
-//     foto: '/img/trending/trending_bottom2.jpg',
-//     category: 'Penyuluhan',
-//     title: 'Penyuluhan ke desa watumaeta',
-//     position: 'botttom',
-//   },
-// ];
+
 
 const getBerita = async () => {
   try {
-      const response = await axios.get('https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/artikel',{
+      const response = await axios.get('https://3e21-180-247-46-208.ngrok-free.app/artikel',{
         headers: {
           "ngrok-skip-browser-warning": "69420",
           },

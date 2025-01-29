@@ -1,8 +1,7 @@
 // src/Kamera.js
 import React, { useEffect, useRef, useState } from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
-import * as tf from '@tensorflow/tfjs'; // Import TensorFlow.js
+import axios from 'axios';
+import '../css/kamera.css'; // Pastikan untuk membuat file CSS terpisah untuk styling
 
 const Kamera = () => {
   const [predictions, setPredictions] = useState([]);
@@ -96,12 +95,12 @@ const Kamera = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       <h1>Deteksi Keong dengan Kamera</h1>
-      <div className="row">
-        <div className="video-container">
+      <div className="row justify-content-center">
+        <div className="col-md-6 text-center">
           <video ref={videoRef} autoPlay playsInline muted></video>
-          <button onClick={captureImage} className="capture-button">
+          <button onClick={captureImage} className="btn btn-primary mt-2">
             Ambil Gambar
           </button>
           <canvas
@@ -110,20 +109,25 @@ const Kamera = () => {
             height="250"
             style={{ display: 'none' }}></canvas>
         </div>
-        <div className="result-container">
+        <div className="col-md-6">
           <h3>Hasil Deteksi:</h3>
           <p className="prediction">
             {predictedLabel ? (
               <span>
-                Jenis Keong: {predictedLabel} <br />
-                Confidence: {confidence}%
+                Jenis Keong: <strong>{predictedLabel}</strong> <br />
+                Confidence: <strong>{confidence}%</strong>
               </span>
             ) : (
               <span>Mendeteksi...</span>
             )}
           </p>
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-          <button onClick={handleImageUpload} className="upload-button">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="form-control mb-2"
+          />
+          <button onClick={handleImageUpload} className="btn btn-success">
             Deteksi Keong
           </button>
         </div>

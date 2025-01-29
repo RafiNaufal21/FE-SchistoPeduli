@@ -17,7 +17,7 @@ import Peta from "./pages/Peta";
 import Tentang from "./pages/Tentang";
 import DetailArtikel from "./pages/Detail-artikel";
 import Error from "./pages/404";
-import LanjutDonasi from "./pages/LanjutDonasi";
+
 import 'leaflet/dist/leaflet.css';
 
 import Resetpassword from "./pages/Resetpassword";
@@ -53,10 +53,7 @@ const Router = createBrowserRouter([
     path: "/deteksikeong",
     element: <DeteksiKeong />,
   },
-  {
-    path: "/lanjutDonasi",
-    element: <LanjutDonasi />,
-  },
+
   {
     path: "/peta",
     element: <Peta />,

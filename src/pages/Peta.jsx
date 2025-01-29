@@ -16,7 +16,7 @@ import {
 
 const getStatistik = async () => {
   try {
-    const response = await axios.get("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/statistik",{
+    const response = await axios.get("https://3e21-180-247-46-208.ngrok-free.app/statistik",{
       headers: {
         "ngrok-skip-browser-warning": "69420",
         },
@@ -49,7 +49,7 @@ const Peta = () => {
   useEffect(() => {
     const fetchLokasi = async () => {
       try {
-        const resp = await fetch("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/lokasi",{
+        const resp = await fetch("https://3e21-180-247-46-208.ngrok-free.app/lokasi",{
           headers: {
             "ngrok-skip-browser-warning": "69420",
             },
@@ -62,7 +62,7 @@ const Peta = () => {
     };
     const fetchDesa = async () => {
       try {
-        const res = await fetch("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/jml",{
+        const res = await fetch("https://3e21-180-247-46-208.ngrok-free.app/jml",{
           headers: {
             "ngrok-skip-browser-warning": "69420",
             },
@@ -225,13 +225,13 @@ const Peta = () => {
               style={{ height: "70vh", width: "70%", margin: "0 auto" }}
             >
               <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                // url='https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF1ZmFsaGFtYmFsaTY1IiwiYSI6ImNtMnd4eWdlZDBidjYyanBwaHJnZ3FrbHAifQ.mJdw4Ew-5zOyObCXR8akhg'
-                // attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors,
-                //             <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,
-                //             Imagery <a href="https://www.mapbox.com/">Mapbox</a>'
-                // id='mapbox/satellite-streets-v12'
+                // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url='https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF1ZmFsaGFtYmFsaTY1IiwiYSI6ImNtMnd4eWdlZDBidjYyanBwaHJnZ3FrbHAifQ.mJdw4Ew-5zOyObCXR8akhg'
+                attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors,
+                            <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,
+                            Imagery <a href="https://www.mapbox.com/">Mapbox</a>'
+                id='mapbox/satellite-streets-v12'
               />
 
               {/* untuk titik desa */}
@@ -292,62 +292,8 @@ const Peta = () => {
                   </Marker>
                 );
               })}
-              {/* untuk data titik keong */}
-              {/* {Object.entries(
-                lokasi.reduce((acc, polygon) => {
-                  const coords = polygon.kordinat
-                    .replace("POLYGON((", "")
-                    .replace("))", "")
-                    .split(",")
-                    .map((coord) => {
-                      const [lng, lat] = coord.trim().split(" ").map(Number);
-                      return [lat, lng];
-                    });
-                      
-                  const centroid = coords.length
-                    ? [
-                        coords.reduce((sum, coord) => sum + coord[0], 0) /
-                          coords.length,
-                        coords.reduce((sum, coord) => sum + coord[1], 0) /
-                          coords.length,
-                      ]
-                    : [0, 0];
-
-                  if (!acc[polygon.nama]) {
-                    acc[polygon.nama] = {
-                      coords,
-                      centroid,
-                      jenis: polygon.jenis,
-                    };
-                  } else {
-                    acc[polygon.nama].coords.push(...coords);
-                  }
-                  return acc;
-                }, {})
-              ).map(([nama, group]) => {
-                if (group.jenis === "poligon") {
-                  return (
-                    <Polygon key={nama} positions={group.coords} color="blue">
-                      <Marker position={group.centroid}>
-                        <Popup>
-                          <strong>{nama}</strong>
-                        </Popup>
-                      </Marker>
-                    </Polygon>
-                  );
-                } else if (group.jenis === "polyline") {
-                  return (
-                    <Polyline key={nama} positions={group.coords} color="blue">
-                      <Marker position={group.centroid}>
-                        <Popup>
-                          <strong>{nama}</strong>
-                        </Popup>
-                      </Marker>
-                    </Polyline>
-                  );
-                }
-                return null;
-              })} */}
+           
+  
             </MapContainer>
           </div>
         </div>

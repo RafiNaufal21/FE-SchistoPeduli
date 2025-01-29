@@ -34,7 +34,7 @@ const DeteksiKeong = () => {
                   masyarakat dari ancaman penyakit ini.
                 </p>
 
-                <a className="btn btn-primary py-2 px-3 me-3" href="#">
+                <a className="btn btn-primary py-2 px-3 me-3" href="#kamera">
                   Deteksi Sekarang
                   <div className="d-inline-flex btn-sm-square bg-white text-primary rounded-circle ms-2">
                     <i className="fa fa-arrow-right"></i>
@@ -57,10 +57,9 @@ const DeteksiKeong = () => {
           </div>
         </div>
       </div>
-      <div className="container-fluid my-5 py-5 causes">
-        <div className="container-xxl py-5"></div>
-      </div>
+      <div className="container-fluid my-5 py-5 causes"></div>
       <Kamera />
+
       <Footer />
     </>
   );

@@ -85,7 +85,11 @@ import { useEffect,useState } from 'react';
 
 const getBerita = async () => {
   try {
-      const response = await axios.get('http://localhost:1945/artikel')
+      const response = await axios.get('https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/artikel',{
+        headers: {
+          "ngrok-skip-browser-warning": "69420",
+          },
+      })
       return response
   } catch (error) {
       return error

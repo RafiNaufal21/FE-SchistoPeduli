@@ -16,6 +16,7 @@ except Exception as e:
     print(f"Error loading model: {e}")
     model = None
 
+print(tf.__version__)
 # Define class labels (this should match your model's classes)
 class_labels = [
     "Identified not as snail", 
@@ -41,6 +42,10 @@ def preprocess_image(image):
     image = np.array(image) / 255.0  # Normalize the image to the range [0, 1]
     image = np.expand_dims(image, axis=0)  # Add batch dimension
     return image
+
+@app.route("/",methods=['GET'])
+def home():
+    return "welcome"
 
 @app.route('/predict', methods=['POST'])
 def predict():

@@ -16,11 +16,7 @@ import {
 
 const getStatistik = async () => {
   try {
-    const response = await axios.get("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/statistik",{
-      headers: {
-        "ngrok-skip-browser-warning": "69420",
-        },
-    });
+    const response = await axios.get("http://localhost:1945/statistik");
     return response.data; // Kembalikan data langsung
   } catch (error) {
     console.error("Error fetching statistik:", error);
@@ -49,7 +45,7 @@ const Peta = () => {
   useEffect(() => {
     const fetchLokasi = async () => {
       try {
-        const resp = await fetch("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/lokasi",{
+        const resp = await fetch("http://localhost:1945/lokasi",{
           headers: {
             "ngrok-skip-browser-warning": "69420",
             },
@@ -62,7 +58,7 @@ const Peta = () => {
     };
     const fetchDesa = async () => {
       try {
-        const res = await fetch("https://1b13-2001-448a-7140-14b2-c018-ad87-ff8-9e52.ngrok-free.app/jml",{
+        const res = await fetch("http://localhost:1945/jml",{
           headers: {
             "ngrok-skip-browser-warning": "69420",
             },
@@ -225,13 +221,13 @@ const Peta = () => {
               style={{ height: "70vh", width: "70%", margin: "0 auto" }}
             >
               <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                // url='https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF1ZmFsaGFtYmFsaTY1IiwiYSI6ImNtMnd4eWdlZDBidjYyanBwaHJnZ3FrbHAifQ.mJdw4Ew-5zOyObCXR8akhg'
-                // attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors,
-                //             <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,
-                //             Imagery <a href="https://www.mapbox.com/">Mapbox</a>'
-                // id='mapbox/satellite-streets-v12'
+                // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url='https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF1ZmFsaGFtYmFsaTY1IiwiYSI6ImNtMnd4eWdlZDBidjYyanBwaHJnZ3FrbHAifQ.mJdw4Ew-5zOyObCXR8akhg'
+                attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors,
+                            <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,
+                            Imagery <a href="https://www.mapbox.com/">Mapbox</a>'
+                id='mapbox/satellite-streets-v12'
               />
 
               {/* untuk titik desa */}
